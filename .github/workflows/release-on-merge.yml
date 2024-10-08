@@ -18,7 +18,7 @@ jobs:
       id: get_latest_tag
       run: |
         git fetch --tags -q
-        latest_tag=$(git tag -l | head -n 1)
+        latest_tag=$(git tag -l | tail -1)
         if [ "$latest_tag" = "" ]; then
           echo "Initial release detected, setting tag to v1"
           echo "new_tag=v1" >> $GITHUB_OUTPUT
