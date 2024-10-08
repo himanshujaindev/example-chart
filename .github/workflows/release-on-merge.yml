@@ -54,7 +54,7 @@ jobs:
           -d '{
             "tag_name": "'$new_tag'",
             "name": "'$new_tag'",
-            "body": "New release ${{ new_tag }} generated on merge of PR #${{ github.event.pull_request.number }}",
+            "body": "New release generated on merge of PR #${{ github.event.pull_request.number }}",
             "draft": false,
             "prerelease": false
           }'
