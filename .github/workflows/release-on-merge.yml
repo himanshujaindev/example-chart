@@ -21,7 +21,7 @@ jobs:
         latest_tag=$(git tag -l | head -n 1 2>/dev/null || echo "none")
         echo "$latest_tag"
         if [ "$latest_tag" = "none" ]; then
-          echo "Initial release detected, setting tag to v1.0.0"
+          echo "Initial release detected, setting tag to v1"
           echo "::set-output name=new_tag::v1"
         else
           echo "Latest tag: $latest_tag"
