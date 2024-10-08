@@ -26,7 +26,7 @@ jobs:
           echo "Latest tag: $latest_tag"
           # Increment the version (minor or patch as required)
           new_version=$(echo $latest_tag | awk -F'v' '{print "v" $2 + 1}')
-          echo "New version: $new_version"
+          echo "New tag: $new_version"
           echo "new_tag=$new_version" >> $GITHUB_OUTPUT
         fi
 
