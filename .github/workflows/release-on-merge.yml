@@ -17,7 +17,7 @@ jobs:
     - name: Determine latest tag
       id: get_latest_tag
       run: |
-        git fetch --tags
+        git fetch --tags -q
         latest_tag=$(git tag -l | head -n 1 2>/dev/null || echo "none")
         echo "$latest_tag"
         if [ "$latest_tag" = "none" ]; then
