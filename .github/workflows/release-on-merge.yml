@@ -22,15 +22,14 @@ jobs:
         echo "$latest_tag"
         if [ "$latest_tag" = "none" ]; then
           echo "Initial release detected, setting tag to v1.0.0"
-          echo "::set-output name=new_tag::v1.0.0"
+          echo "::set-output name=new_tag::v1"
         else
           echo "Latest tag: $latest_tag"
           # Increment the version (minor or patch as required)
-          new_version=$(echo $latest_tag | awk -F. '{$NF+=1; OFS="."; print $0}')
+          new_version=$(echo $latest_tag | awk -F'v' '{print "v" $2 + 1}')
           echo "New version: $new_version"
           echo "::set-output name=new_tag::$new_version"
         fi
-        echo "latest_tag=$latest_tag"
         
     - name: get tag
       run: |
