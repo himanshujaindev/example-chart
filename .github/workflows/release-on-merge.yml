@@ -3,6 +3,7 @@ name: Create Release on Merge
 on:
   pull_request:
     types: [closed]  # Trigger on PR close (merge or close)
+  workflow_dispatch:
 
 jobs:
   release:
