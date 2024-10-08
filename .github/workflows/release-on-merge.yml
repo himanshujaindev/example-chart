@@ -23,13 +23,13 @@ jobs:
         latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "none")
         if [ "$latest_tag" = "none" ]; then
           echo "Initial release detected, setting tag to v1.0.0"
-          echo "name=new_tag::v1.0.0" >> $GITHUB_OUTPUT
+          echo "new_tag=v1.0.0" >> $GITHUB_OUTPUT
         else
           echo "Latest tag: $latest_tag"
           # Increment the version (minor or patch as required)
           new_version=$(echo $latest_tag | awk -F. '{$NF+=1; OFS="."; print $0}')
           echo "New version: $new_version"
-          echo "name=new_tag::$new_version" >> $GITHUB_OUTPUT
+          echo "new_tag=$new_version" >> $GITHUB_OUTPUT
         fi
 
     - name: Create tag and push it
