@@ -18,7 +18,7 @@ jobs:
       id: get_latest_tag
       run: |
         # Check if there are any existing tags
-        latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo "none")
+        latest_tag=$(git tag --sort=-creatordate | head -n 1 2>/dev/null || echo "none")
         echo "$latest_tag"
         if [ "$latest_tag" = "none" ]; then
           echo "Initial release detected, setting tag to v1.0.0"
