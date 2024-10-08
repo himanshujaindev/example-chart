@@ -4,6 +4,9 @@ on:
   pull_request:
     types: [closed]  # Trigger on PR close (merge or close)
 
+permissions:
+  contents: write  # Grant write permissions to push tags
+
 jobs:
   release:
     if: github.event.pull_request.merged == true  # Only run when PR is merged
