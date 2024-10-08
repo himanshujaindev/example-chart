@@ -17,8 +17,9 @@ jobs:
     - name: Determine latest tag
       id: get_latest_tag
       run: |
+        git fetch --tags
         latest_tag=`git tag -l | head -n 1`
-        echo "$latest_tag"
+        echo "latest_tag=$latest_tag"
         
 
     # - name: Create tag and push it
