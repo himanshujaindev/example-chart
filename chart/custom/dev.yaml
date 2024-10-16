@@ -1,1 +1,4 @@
 replicas: 4
+image:
+  repository: nginx
+  tag: REPLACE_WITH_TAG
