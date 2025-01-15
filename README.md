@@ -17,7 +17,7 @@ helm install --debug --dry-run myname ./mychart --set favoriteDrink=slurm
 helm install --debug --dry-run myname ./mychart --set favorite.food=null
 
 
-
+kind delete cluster --name helm
 
 ---
 - A template directive is enclosed in {{ and }} blocks.
