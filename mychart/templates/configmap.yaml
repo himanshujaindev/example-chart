@@ -4,5 +4,28 @@ metadata:
   name: {{ .Release.Name }}-configmap
 data:
   myvalue: "Hello World"
-  drink: {{ .Values.favorite.drink }}
-  food: {{ .Values.favorite.food }}
+  drink: {{ .Values.favorite.drink | default (printf "%s-tea" (include "fullname" .)) | repeat 5 | quote }}
+  food: {{ .Values.favorite.food | upper | quote }}
+  pods: |-
+{{- range (lookup "v1" "Pod" "kube-system" "").items }}
+{{ printf "- %s" .metadata.name | indent 4 }}
+{{- end }}
+  namespace: |-
+{{- range (lookup "v1" "Namespace" "" "").items }}
+    - {{ .metadata.name }}
+{{- end }}
+{{- if eq .Values.favorite.drink "coffee" }}
+  mug: "true"
+{{- else }}
+  mug: "false"
+{{- end }}
+{{- with .Values.favorite }} # . scope points to .Values.favorite
+  drink1: {{ .drink | default "tea" | quote }}
+  food1: {{ .food | upper | quote }}
+  release1: {{ $.Release.Name }} # $ maps to root scope
+{{- end }} # scope is reset
+  release2: {{ .Release.Name }}
+  toppings: |-
+{{- range .Values.pizzaToppings }}
+    - {{ . | title | quote }} # . is set to the current pizza topping
+{{- end }}

@@ -1,4 +1,10 @@
 # favoriteDrink: coffee
 favorite:
-  drink: coffee
+  # drink: coffee
   food: pizza
+pizzaToppings: # list or slice
+  - mushrooms
+  - cheese
+  - peppers
+  - onions
+  - pineapple
