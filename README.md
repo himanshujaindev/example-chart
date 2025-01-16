@@ -5,9 +5,6 @@
 example-chart -> For argocd
 
 ---
-https://helm.sh/docs/chart_template_guide/getting_started/
-
-
 kind create cluster --name helm --config kind.yaml
 
 helm create mychart
@@ -96,3 +93,8 @@ define:
 {{- end }}
 ```
 
+Reference:
+1. https://helm.sh/docs/chart_template_guide/getting_started/
+2. https://helm.sh/docs/chart_template_guide/function_list/
+3. https://pkg.go.dev/text/template
+4. https://masterminds.github.io/sprig/
