@@ -5,9 +5,13 @@
 example-chart -> For argocd
 
 ---
-kind create cluster --name helm --config kind.yaml
 https://helm.sh/docs/chart_template_guide/getting_started/
+
+
+kind create cluster --name helm --config kind.yaml
+
 helm create mychart
+helm install --debug --dry-run=server myname ./mychart
 helm install myname ./mychart
 helm get manifest myname
 helm uninstall myname
@@ -16,6 +20,7 @@ helm install --debug --dry-run myname ./mychart
 helm install --debug --dry-run myname ./mychart --set favoriteDrink=slurm
 helm install --debug --dry-run myname ./mychart --set favorite.food=null
 helm install --debug --dry-run=server myname ./mychart (When using lookup function as it require access k8s api)
+helm install --debug --dry-run=server --disable-openapi-validation myname ./mychart
 
 kind delete cluster --name helm
 
@@ -43,11 +48,27 @@ kind delete cluster --name helm
          $ is mapped to the root scope
   range
     |- marker in YAML takes a multi-line string
-- named template - define, template, block
+- named template (partial or subtemplate) - define, template, block
+  template names are global
+  files whose name begins with an underscore (_) are assumed to not have a manifest inside
+  include = pass the output to another pipeline function (used instead of template object)
+  define does not produce output unless it is called with a template
+  It is considered preferable to use include over template in Helm templates simply so that the output formatting can be handled better for YAML documents.
 - When the template engine runs, it removes the contents inside of {{ and }}, but it leaves the remaining whitespace exactly as is
 - {{- (with the dash and space added) indicates that whitespace should be chomped left, while -}} means whitespace to the right should be consumed. Be careful! Newlines are whitespace!
     {{- 3 }} = trim left whitespace and print 3
     {{-3 }} = print -3
+- variable is a named reference to another object
+
+- Helm Debugging
+    helm lint mychart
+    helm template --debug mychart
+    helm install --dry-run --debug myname mychart
+    helm install --dry-run=server --debug myname mychart
+
+    helm install myname ./mychart
+    helm get manifest myname
+    helm uninstall myname
 ```
 
 if/else:
@@ -68,4 +89,10 @@ with:
 {{ end }}
 ```
 
-paused at functions_and_pipelines
+define:
+```
+{{- define "MY.NAME" }}
+  # body of template here
+{{- end }}
+```
+

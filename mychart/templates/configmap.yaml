@@ -2,8 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
+  {{- template "mychart.labels" . }}
+{{ include "mychart.app" . | indent 4 }} # 
 data:
   myvalue: "Hello World"
+{{ include "mychart.app" . | indent 2 }}
   drink: {{ .Values.favorite.drink | default (printf "%s-tea" (include "fullname" .)) | repeat 5 | quote }}
   food: {{ .Values.favorite.food | upper | quote }}
   pods: |-
@@ -19,13 +22,44 @@ data:
 {{- else }}
   mug: "false"
 {{- end }}
+{{- $relname := .Release.Name -}}
 {{- with .Values.favorite }} # . scope points to .Values.favorite
   drink1: {{ .drink | default "tea" | quote }}
   food1: {{ .food | upper | quote }}
   release1: {{ $.Release.Name }} # $ maps to root scope
+  release2: {{ $relname }}
 {{- end }} # scope is reset
-  release2: {{ .Release.Name }}
+  release3: {{ .Release.Name }}
   toppings: |-
 {{- range .Values.pizzaToppings }}
     - {{ . | title | quote }} # . is set to the current pizza topping
+{{- end }}
+  newtoppings: |-
+{{- range $index, $topping := .Values.pizzaToppings }}
+    {{ $index }}: {{ $topping }}
+{{- end }}
+{{- range $key, $val := .Values.favorite }}
+  my-{{ $key }}: {{ printf "my-%s" $val | quote }}
+{{- end }}
+
+{{- range .Values.tlsSecrets }} # iterating through list
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .name }}
+  labels:
+    # Many helm templates would use `.` below, but that will not work,
+    # however `$` will work here
+    app.kubernetes.io/name: {{ template "fullname" $ }}
+    # I cannot reference .Chart.Name, but I can do $.Chart.Name
+    helm.sh/chart: "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+    app.kubernetes.io/instance: "{{ $.Release.Name }}"
+    # Value from appVersion in Chart.yaml
+    app.kubernetes.io/version: "{{ $.Chart.AppVersion }}"
+    app.kubernetes.io/managed-by: "{{ $.Release.Service }}"
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ .certificate | b64enc }}
+  tls.key: {{ .key | b64enc }}
 {{- end }}
