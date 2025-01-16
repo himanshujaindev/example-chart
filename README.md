@@ -19,7 +19,7 @@ helm install --debug --dry-run=server myname ./mychart (When using lookup functi
 
 kind delete cluster --name helm
 
----
+```
 - A template directive is enclosed in {{ and }} blocks.
 - read .Release.Name as "start at the top namespace, find the Release object, then look inside of it for an object called Name" (namespaced objects)
 - Objects = Had just one value (can be another object or function)
@@ -48,6 +48,7 @@ kind delete cluster --name helm
 - {{- (with the dash and space added) indicates that whitespace should be chomped left, while -}} means whitespace to the right should be consumed. Be careful! Newlines are whitespace!
     {{- 3 }} = trim left whitespace and print 3
     {{-3 }} = print -3
+```
 
 if/else:
 ```
